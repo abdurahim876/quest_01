@@ -18,6 +18,17 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Arcanoid")
 clock = pygame.time.Clock()
 
+font_name = pygame.font.match_font('arial')
+def draw_text(surf, text, size, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+background = pygame.Surface(screen.get_size())
+background.fill((0, 0, 0))  # Например, черный фон
+background_rect = background.get_rect()
+
 #игрок
 player_group = pygame.sprite.Group()
 class Player(pygame.sprite.Sprite):
@@ -56,10 +67,12 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.Surface((15, 15), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.radius=int(self.rect.width/2)
-        pygame.draw.circle(self.image,RED,(self.radius,self.radius),self.radius)
-        self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height-15)
-        self.speed_x = random.choice([-5, 5])
-        self.speed_y = random.randint(-5, 5)
+        pygame.draw.circle(self.image,WHITE,(self.radius,self.radius),self.radius)
+        self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height-25)
+
+        self.speed_y = 5
+        self.speed_x = 1
+
 
     def update(self):
         self.rect.x += self.speed_x
@@ -73,7 +86,7 @@ class Ball(pygame.sprite.Sprite):
         elif self.rect.bottom > HEIGHT:
             self.speed_y *= -1
             self.rect.top = 15
-            self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height-20)
+            self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height-25)
 ball = Ball()
 all_sprites.add(ball)
 
@@ -88,12 +101,13 @@ class Bricks(pygame.sprite.Sprite):
         self.rect.x =x
         self.rect.y =y
 for a in range(0,17):
-    for b in range(1,11):
+    for b in range(2,11):
         x=1+41*a
         y=1+16*b
         brick = Bricks(x,y)
         all_sprites.add(brick)
         bricks_group.add(brick)
+score = 0
 
 
 # Цикл игры
@@ -108,13 +122,21 @@ while running:
     hits = pygame.sprite.spritecollide(ball, bricks_group, True, pygame.sprite.collide_circle)
     if hits:
         ball.speed_y *= -1
+        for hit in hits:
+            score += 1
+            brick = Bricks(x, y)
+            all_sprites.add(brick)
+            bricks_group.add(brick)
+
     hits = pygame.sprite.spritecollide(ball, player_group, False)
     if hits:
         ball.speed_y *= -1
 
     # Рендеринг
     screen.fill(BLACK)
+    screen.blit(background, background_rect)
     all_sprites.draw(screen)
+    draw_text(screen, str(score), 20, WIDTH / 2, 10)
     # После отрисовки всего, переворачиваем экран
     pygame.display.flip()
 
