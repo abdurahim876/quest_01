@@ -24,7 +24,7 @@ class Ball(pygame.sprite.Sprite):
         if self.speed_y == 0:
             if keys[pygame.K_SPACE]:
                 self.speed_y = -5
-                self.speed_x = 2
+                self.speed_x = -2
 
         if self.rect.left < 0:
             self.speed_x *= -1
