@@ -1,5 +1,11 @@
 import pygame
 import random
+from game import WIDTH, HEIGHT, WHITE, GREEN,FPS,BLACK, RED, Player, Ball, Bricks
+pygame.init()
+pygame.mixer.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Arcanoid")
+clock = pygame.time.Clock()
 
 def show_go_screen():
     screen.blit(background, background_rect)
@@ -15,13 +21,6 @@ def show_go_screen():
                 waiting = False
             if event.type == pygame.KEYUP:
                 waiting = False
-from game import WIDTH, HEIGHT, WHITE, GREEN,FPS,BLACK, RED, Player, Ball, Bricks
-
-pygame.init()
-pygame.mixer.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Arcanoid")
-clock = pygame.time.Clock()
 
 font_name = pygame.font.match_font('arial')
 def draw_text(surf, text, size, x, y):
@@ -33,8 +32,6 @@ def draw_text(surf, text, size, x, y):
 background = pygame.Surface(screen.get_size())
 background.fill((0, 0, 0))
 background_rect = background.get_rect()
-
-
 
 #игрок
 player_group = pygame.sprite.Group()
@@ -54,7 +51,6 @@ for a in range(0,17):
         brick = Bricks(x,y)
         all_sprites.add(brick)
         bricks_group.add(brick)
-
 score = 0
 # Цикл игры
 game_over = False
@@ -67,13 +63,7 @@ while running:
             running = False
         if keys[pygame.K_RETURN]:
             waiting = False
-
-
-
-
     all_sprites.update()
-
-
     hits = pygame.sprite.spritecollide(ball, bricks_group, True, pygame.sprite.collide_circle)
     if hits:
         ball.speed_y *= -1
@@ -82,14 +72,11 @@ while running:
             brick = Bricks(x, y)
             all_sprites.add(brick)
             bricks_group.add(brick)
-
     hits = pygame.sprite.spritecollide(ball, player_group, False)
     if hits:
         ball.speed_y *= -1
-
     if ball.rect.top> HEIGHT:
         game_over = True
-
     if game_over:
         show_go_screen()
         game_over = False
@@ -119,5 +106,4 @@ while running:
     draw_text(screen, str(score), 20, WIDTH / 2, 10)
     # После отрисовки всего, переворачиваем экран
     pygame.display.flip()
-
 pygame.quit()

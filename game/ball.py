@@ -32,11 +32,8 @@ class Ball(pygame.sprite.Sprite):
             self.speed_x *= -1
         elif self.rect.top < 0:
             self.speed_y *= -1
-        elif self.rect.bottom > HEIGHT:
-            self.speed_y =0
-            self.speed_x =0
-            self.rect.top = 15
-            self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height-25)
+
+
 
 
 

@@ -1,5 +1,5 @@
 import pygame
-from .constants import GREEN, WIDTH, HEIGHT
+from .constants import GREEN, WIDTH, HEIGHT, WHITE
 
 
 class Player(pygame.sprite.Sprite):
@@ -10,7 +10,9 @@ class Player(pygame.sprite.Sprite):
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT - self.rect.height)
-
+        self.lives = 3
+        self.hidden = False
+        self.hide_timer = pygame.time.get_ticks()
 
 
     def update(self):
