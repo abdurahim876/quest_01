@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 def show_go_screen():
     screen.blit(background, background_rect)
     draw_text(screen, f"Your score:{score}", 20, WIDTH / 2-20, HEIGHT * 3 / 4-30)
-    draw_text(screen, "Press Enter to begin", 20, WIDTH / 2, HEIGHT * 3 / 4)
+    draw_text(screen, "Press <Space> to begin", 20, WIDTH / 2, HEIGHT * 3 / 4)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -29,6 +29,7 @@ def draw_text(surf, text, size, x, y):
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
+
 background = pygame.Surface(screen.get_size())
 background.fill((0, 0, 0))
 background_rect = background.get_rect()
@@ -55,13 +56,14 @@ score = 0
 # Цикл игры
 game_over = False
 running = True
+
 while running:
     clock.tick(FPS)
     keys = pygame.key.get_pressed()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if keys[pygame.K_RETURN]:
+        if keys[pygame.K_SPACE]:
             waiting = False
     all_sprites.update()
     hits = pygame.sprite.spritecollide(ball, bricks_group, True, pygame.sprite.collide_circle)
@@ -99,11 +101,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     all_sprites.update()
-    # Рендеринг
+
     screen.fill(BLACK)
     screen.blit(background, background_rect)
     all_sprites.draw(screen)
     draw_text(screen, str(score), 20, WIDTH / 2, 10)
-    # После отрисовки всего, переворачиваем экран
+    if score==0:
+        draw_text(screen, "Press <Space> to begin", 20, WIDTH / 2, HEIGHT * 3 / 4)
+
     pygame.display.flip()
 pygame.quit()
